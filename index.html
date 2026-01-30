@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finnish Verb Flashcards</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent2: #22c55e;
+      --danger: #ef4444;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 45%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .progress {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .card {
+      margin-top: 16px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 170px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .word {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .answer {
+      font-size: 18px;
+      color: var(--accent2);
+      font-weight: 600;
+      display: none;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .controls2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: transform 0.05s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      background: rgba(255,255,255,0.10);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .primary {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.15);
+    }
+
+    .primary:hover {
+      background: rgba(56, 189, 248, 0.22);
+    }
+
+    .danger {
+      border-color: rgba(239, 68, 68, 0.35);
+      background: rgba(239, 68, 68, 0.12);
+    }
+
+    .danger:hover {
+      background: rgba(239, 68, 68, 0.18);
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 14px;
+      line-height: 1.4;
+    }
+
+    .footer {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .toggle {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+    }
+
+    @media (max-width: 420px) {
+      .controls2 {
+        grid-template-columns: 1fr;
+      }
+      .progress {
+        text-align: left;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div>
+        <h1>Finnish Verb Flashcards 🇫🇮</h1>
+        <p class="subtitle">Learn common Finnish verbs with quick flashcards.</p>
+      </div>
+      <div class="progress" id="progressText">1 / 20</div>
+    </div>
+
+    <div class="card">
+      <div class="label" id="questionLabel">Finnish verb</div>
+      <div class="word" id="questionText">olla</div>
+
+      <div class="label" id="answerLabel" style="margin-top: 10px;">English meaning</div>
+      <div class="answer" id="answerText">to be</div>
+
+      <div class="hint" id="hintText">Click “Reveal” to see the meaning.</div>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="revealBtn">Reveal</button>
+      <button id="hideBtn">Hide</button>
+    </div>
+
+    <div class="controls2">
+      <button id="prevBtn">⬅ Previous</button>
+      <button id="shuffleBtn">🔀 Shuffle</button>
+      <button id="nextBtn">Next ➡</button>
+    </div>
+
+    <div class="footer">
+      <div class="toggle">
+        <input type="checkbox" id="autoRevealToggle" />
+        <label for="autoRevealToggle">Auto-reveal on next card</label>
+      </div>
+      <button class="danger" id="resetBtn">Reset</button>
+    </div>
+
+    <div class="small">
+      💡 Tip: You can add more verbs inside the code later. This is a beginner-friendly project for GitHub.
+    </div>
+  </div>
+
+  <script>
+    // Finnish verb flashcards (Finnish -> English)
+    // You can add more verbs here easily.
+    const originalDeck = [
+      { fi: "olla", en: "to be" },
+      { fi: "tehdä", en: "to do / to make" },
+      { fi: "mennä", en: "to go" },
+      { fi: "tulla", en: "to come" },
+      { fi: "nähdä", en: "to see" },
+      { fi: "kuulla", en: "to hear" },
+      { fi: "puhua", en: "to speak" },
+      { fi: "syödä", en: "to eat" },
+      { fi: "juoda", en: "to drink" },
+      { fi: "nukkua", en: "to sleep" },
+      { fi: "kirjoittaa", en: "to write" },
+      { fi: "lukea", en: "to read" },
+      { fi: "opiskella", en: "to study" },
+      { fi: "työskennellä", en: "to work" },
+      { fi: "haluta", en: "to want" },
+      { fi: "tarvita", en: "to need" },
+      { fi: "rakastaa", en: "to love" },
+      { fi: "muistaa", en: "to remember" },
+      { fi: "unohtaa", en: "to forget" },
+      { fi: "ymmärtää", en: "to understand" }
+    ];
+
+    let deck = [...originalDeck];
+    let currentIndex = 0;
+    let revealed = false;
+
+    const questionText = document.getElementById("questionText");
+    const answerText = document.getElementById("answerText");
+    const progressText = document.getElementById("progressText");
+    const hintText = document.getElementById("hintText");
+
+    const revealBtn = document.getElementById("revealBtn");
+    const hideBtn = document.getElementById("hideBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const shuffleBtn = document.getElementById("shuffleBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const autoRevealToggle = document.getElementById("autoRevealToggle");
+
+    function updateCard() {
+      const card = deck[currentIndex];
+      questionText.textContent = card.fi;
+      answerText.textContent = card.en;
+
+      progressText.textContent = `${currentIndex + 1} / ${deck.length}`;
+
+      if (autoRevealToggle.checked) {
+        revealed = true;
+      } else {
+        revealed = false;
+      }
+
+      updateRevealState();
+    }
+
+    function updateRevealState() {
+      if (revealed) {
+        answerText.style.display = "block";
+        hintText.textContent = "Nice! Click “Hide” to test yourself again.";
+      } else {
+        answerText.style.display = "none";
+        hintText.textContent = "Click “Reveal” to see the meaning.";
+      }
+    }
+
+    function reveal() {
+      revealed = true;
+      updateRevealState();
+    }
+
+    function hide() {
+      revealed = false;
+      updateRevealState();
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % deck.length;
+      updateCard();
+    }
+
+    function prevCard() {
+      currentIndex = (currentIndex - 1 + deck.length) % deck.length;
+      updateCard();
+    }
+
+    function shuffleDeck() {
+      // Fisher-Yates shuffle
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
+      currentIndex = 0;
+      updateCard();
+    }
+
+    function resetApp() {
+      deck = [...originalDeck];
+      currentIndex = 0;
+      revealed = false;
+      autoRevealToggle.checked = false;
+      updateCard();
+    }
+
+    // Button events
+    revealBtn.addEventListener("click", reveal);
+    hideBtn.addEventListener("click", hide);
+    nextBtn.addEventListener("click", nextCard);
+    prevBtn.addEventListener("click", prevCard);
+    shuffleBtn.addEventListener("click", shuffleDeck);
+    resetBtn.addEventListener("click", resetApp);
+
+    // Keyboard shortcuts (optional but nice)
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") nextCard();
+      if (e.key === "ArrowLeft") prevCard();
+      if (e.key.toLowerCase() === "r") reveal();
+      if (e.key.toLowerCase() === "h") hide();
+    });
+
+    // Start app
+    updateCard();
+  </script>
+</body>
+</html>
+
