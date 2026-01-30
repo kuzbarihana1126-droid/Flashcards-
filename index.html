@@ -7,412 +7,319 @@
 
 <style>
 :root {
-    /* Light theme colors */
-    --bg: #f5f5dc;         /* PAGE BACKGROUND: beige */
-    --card: #f5f5dc;       /* CARD BACKGROUND: beige */
-    --text: #000000;       /* TEXT: black */
-    --muted: #6b7280;      /* slightly darker muted text for contrast on beige */
-    --accent: #2563eb;     /* blue for buttons/highlights (kept for visibility) */
-    --accent2: #15803d;    /* green for the answer text */
-    --danger: #b91c1c;     /* red for reset button */
-    --border: rgba(0,0,0,0.12); /* subtle border on light bg */
+  --bg: #f5f5dc;        /* beige page background */
+  --card: #ffffff;     /* white flashcard */
+  --text: #000000;     /* black text */
+  --muted: #555555;
+  --accent: #2563eb;
+  --success: #15803d;
+  --danger: #b91c1c;
+  --border: rgba(0,0,0,0.15);
 }
 
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 45%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+.app {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
 
-    .app {
-      width: 100%;
-      max-width: 520px;
-      background: rgba(17, 24, 39, 0.85);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-      backdrop-filter: blur(8px);
-    }
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
+h1 {
+  font-size: 18px;
+  margin: 0;
+}
 
-    h1 {
-      font-size: 18px;
-      margin: 0;
-      letter-spacing: 0.2px;
-    }
+.subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
 
-    .subtitle {
-      margin: 6px 0 0;
-      font-size: 13px;
-      color: var(--muted);
-    }
+.progress {
+  font-size: 13px;
+  color: var(--muted);
+}
 
-    .progress {
-      font-size: 13px;
-      color: var(--muted);
-      text-align: right;
-      white-space: nowrap;
-    }
+.card {
+  margin-top: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
 
-    .card {
-      margin-top: 16px;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      min-height: 170px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 10px;
-    }
+.label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
 
-    .label {
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
+.word {
+  font-size: 28px;
+  font-weight: 700;
+}
 
-    .word {
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 1.1;
-    }
+.answer {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--success);
+  display: none;
+}
 
-    .answer {
-      font-size: 18px;
-      color: var(--accent2);
-      font-weight: 600;
-      display: none;
-    }
+.hint {
+  font-size: 13px;
+  color: var(--muted);
+}
 
-    .hint {
-      font-size: 13px;
-      color: var(--muted);
-    }
+.controls,
+.controls2 {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
 
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 14px;
-    }
+.controls {
+  grid-template-columns: 1fr 1fr;
+}
 
-    .controls2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
+.controls2 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
 
-    button {
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: transform 0.05s ease, background 0.2s ease;
-    }
+button {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: #f9f9f9;
+  color: var(--text);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
 
-    button:hover {
-      background: rgba(255,255,255,0.10);
-    }
+button:hover {
+  background: #eeeeee;
+}
 
-    button:active {
-      transform: translateY(1px);
-    }
+.primary {
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+}
 
-    .primary {
-      border-color: rgba(56, 189, 248, 0.35);
-      background: rgba(56, 189, 248, 0.15);
-    }
+.primary:hover {
+  background: #1d4ed8;
+}
 
-    .primary:hover {
-      background: rgba(56, 189, 248, 0.22);
-    }
+.danger {
+  background: var(--danger);
+  color: #ffffff;
+  border: none;
+}
 
-    .danger {
-      border-color: rgba(239, 68, 68, 0.35);
-      background: rgba(239, 68, 68, 0.12);
-    }
+.footer {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-    .danger:hover {
-      background: rgba(239, 68, 68, 0.18);
-    }
+.toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+}
 
-    .small {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 14px;
-      line-height: 1.4;
-    }
+.small {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 14px;
+}
 
-    .footer {
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .toggle {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--accent);
-    }
-
-    @media (max-width: 420px) {
-      .controls2 {
-        grid-template-columns: 1fr;
-      }
-      .progress {
-        text-align: left;
-      }
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-  </style>
+@media (max-width: 420px) {
+  .controls2 {
+    grid-template-columns: 1fr;
+  }
+  .header {
+    flex-direction: column;
+  }
+}
+</style>
 </head>
+
 <body>
-  <div class="app">
-    <div class="header">
-      <div>
-        <h1>Finnish Verb Flashcards 🇫🇮</h1>
-        <p class="subtitle">Learn common Finnish verbs with quick flashcards.</p>
-      </div>
-      <div class="progress" id="progressText">1 / 20</div>
+<div class="app">
+  <div class="header">
+    <div>
+      <h1>Finnish Verb Flashcards 🇫🇮</h1>
+      <div class="subtitle">Basic verbs for everyday communication</div>
     </div>
-
-    <div class="card">
-      <div class="label" id="questionLabel">Finnish verb</div>
-      <div class="word" id="questionText">olla</div>
-
-      <div class="label" id="answerLabel" style="margin-top: 10px;">English meaning</div>
-      <div class="answer" id="answerText">to be</div>
-
-      <div class="hint" id="hintText">Click “Reveal” to see the meaning.</div>
-    </div>
-
-    <div class="controls">
-      <button class="primary" id="revealBtn">Reveal</button>
-      <button id="hideBtn">Hide</button>
-    </div>
-
-    <div class="controls2">
-      <button id="prevBtn">⬅ Previous</button>
-      <button id="shuffleBtn">🔀 Shuffle</button>
-      <button id="nextBtn">Next ➡</button>
-    </div>
-
-    <div class="footer">
-      <div class="toggle">
-        <input type="checkbox" id="autoRevealToggle" />
-        <label for="autoRevealToggle">Auto-reveal on next card</label>
-      </div>
-      <button class="danger" id="resetBtn">Reset</button>
-    </div>
-
-    <div class="small">
-      💡 Tip: You can add more verbs inside the code later. This is a beginner-friendly project for GitHub.
-    </div>
+    <div class="progress" id="progressText"></div>
   </div>
 
-  <script>
-    // Finnish verb flashcards (Finnish -> English)
-    // You can add more verbs here easily.
-    const originalDeck = [
-            { fi: "asua", en: "to live (reside)" },
-      { fi: "käydä", en: "to go/visit (regularly)" },
-      { fi: "lähteä", en: "to leave" },
-      { fi: "saapua", en: "to arrive" },
-      { fi: "odottaa", en: "to wait" },
-      { fi: "auttaa", en: "to help" },
-      { fi: "kysyä", en: "to ask" },
-      { fi: "vastata", en: "to answer" },
-      { fi: "kertoa", en: "to tell" },
-      { fi: "selittää", en: "to explain" },
-      { fi: "antaa", en: "to give" },
-      { fi: "ottaa", en: "to take" },
-      { fi: "ostaa", en: "to buy" },
-      { fi: "myydä", en: "to sell" },
-      { fi: "maksaa", en: "to pay / to cost" },
-      { fi: "löytää", en: "to find" },
-      { fi: "etsiä", en: "to search/look for" },
-      { fi: "näyttää", en: "to show / to look like" },
-      { fi: "avata", en: "to open" },
-      { fi: "sulkea", en: "to close" },
-      { fi: "aloittaa", en: "to start" },
-      { fi: "lopettaa", en: "to stop / to finish" },
-      { fi: "jatkaa", en: "to continue" },
-      { fi: "oppia", en: "to learn" },
-      { fi: "opettaa", en: "to teach" },
-      { fi: "kokeilla", en: "to try" },
-      { fi: "harjoitella", en: "to practice" },
-      { fi: "muuttaa", en: "to move (change home)" },
-      { fi: "matkustaa", en: "to travel" },
-      { fi: "ajaa", en: "to drive" },
-      { fi: "soittaa", en: "to call (phone) / to play (music)" },
-      { fi: "lähettää", en: "to send" },
-      { fi: "saada", en: "to get / to receive" },
-      { fi: "viedä", en: "to take (something somewhere)" },
-      { fi: "tuoda", en: "to bring" },
-      { fi: "siivota", en: "to clean" },
-      { fi: "pestä", en: "to wash" },
-      { fi: "kokata", en: "to cook (casual)" },
-      { fi: "pitää", en: "to like / to hold / must" },
-      { fi: "tietää", en: "to know (a fact)" }
-      { fi: "olla", en: "to be" },
-      { fi: "tehdä", en: "to do / to make" },
-      { fi: "mennä", en: "to go" },
-      { fi: "tulla", en: "to come" },
-      { fi: "nähdä", en: "to see" },
-      { fi: "kuulla", en: "to hear" },
-      { fi: "puhua", en: "to speak" },
-      { fi: "syödä", en: "to eat" },
-      { fi: "juoda", en: "to drink" },
-      { fi: "nukkua", en: "to sleep" },
-      { fi: "kirjoittaa", en: "to write" },
-      { fi: "lukea", en: "to read" },
-      { fi: "opiskella", en: "to study" },
-      { fi: "työskennellä", en: "to work" },
-      { fi: "haluta", en: "to want" },
-      { fi: "tarvita", en: "to need" },
-      { fi: "rakastaa", en: "to love" },
-      { fi: "muistaa", en: "to remember" },
-      { fi: "unohtaa", en: "to forget" },
-      { fi: "ymmärtää", en: "to understand" }
-    ];
+  <div class="card">
+    <div class="label">Finnish verb</div>
+    <div class="word" id="questionText"></div>
 
-    let deck = [...originalDeck];
-    let currentIndex = 0;
-    let revealed = false;
+    <div class="label" style="margin-top:10px;">English meaning</div>
+    <div class="answer" id="answerText"></div>
 
-    const questionText = document.getElementById("questionText");
-    const answerText = document.getElementById("answerText");
-    const progressText = document.getElementById("progressText");
-    const hintText = document.getElementById("hintText");
+    <div class="hint" id="hintText"></div>
+  </div>
 
-    const revealBtn = document.getElementById("revealBtn");
-    const hideBtn = document.getElementById("hideBtn");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const shuffleBtn = document.getElementById("shuffleBtn");
-    const resetBtn = document.getElementById("resetBtn");
-    const autoRevealToggle = document.getElementById("autoRevealToggle");
+  <div class="controls">
+    <button class="primary" id="revealBtn">Reveal</button>
+    <button id="hideBtn">Hide</button>
+  </div>
 
-    function updateCard() {
-      const card = deck[currentIndex];
-      questionText.textContent = card.fi;
-      answerText.textContent = card.en;
+  <div class="controls2">
+    <button id="prevBtn">⬅ Previous</button>
+    <button id="shuffleBtn">🔀 Shuffle</button>
+    <button id="nextBtn">Next ➡</button>
+  </div>
 
-      progressText.textContent = `${currentIndex + 1} / ${deck.length}`;
+  <div class="footer">
+    <div class="toggle">
+      <input type="checkbox" id="autoRevealToggle" />
+      <label for="autoRevealToggle">Auto-reveal</label>
+    </div>
+    <button class="danger" id="resetBtn">Reset</button>
+  </div>
 
-      if (autoRevealToggle.checked) {
-        revealed = true;
-      } else {
-        revealed = false;
-      }
+  <div class="small">
+    💡 Beginner-friendly Finnish verb flashcards — perfect starter GitHub project
+  </div>
+</div>
 
-      updateRevealState();
-    }
+<script>
+const originalDeck = [
+  { fi: "olla", en: "to be" },
+  { fi: "tehdä", en: "to do / to make" },
+  { fi: "mennä", en: "to go" },
+  { fi: "tulla", en: "to come" },
+  { fi: "nähdä", en: "to see" },
+  { fi: "kuulla", en: "to hear" },
+  { fi: "puhua", en: "to speak" },
+  { fi: "sanoa", en: "to say" },
+  { fi: "kysyä", en: "to ask" },
+  { fi: "vastata", en: "to answer" },
+  { fi: "syödä", en: "to eat" },
+  { fi: "juoda", en: "to drink" },
+  { fi: "nukkua", en: "to sleep" },
+  { fi: "herätä", en: "to wake up" },
+  { fi: "kirjoittaa", en: "to write" },
+  { fi: "lukea", en: "to read" },
+  { fi: "opiskella", en: "to study" },
+  { fi: "oppia", en: "to learn" },
+  { fi: "työskennellä", en: "to work" },
+  { fi: "asua", en: "to live (reside)" },
+  { fi: "käydä", en: "to visit / attend" },
+  { fi: "ajaa", en: "to drive" },
+  { fi: "matkustaa", en: "to travel" },
+  { fi: "ottaa", en: "to take" },
+  { fi: "antaa", en: "to give" },
+  { fi: "saada", en: "to get / receive" },
+  { fi: "tuoda", en: "to bring" },
+  { fi: "viedä", en: "to take (away)" },
+  { fi: "ostaa", en: "to buy" },
+  { fi: "myydä", en: "to sell" },
+  { fi: "maksaa", en: "to pay" },
+  { fi: "löytää", en: "to find" },
+  { fi: "etsiä", en: "to look for" },
+  { fi: "auttaa", en: "to help" },
+  { fi: "tarvita", en: "to need" },
+  { fi: "haluta", en: "to want" },
+  { fi: "pitää", en: "to like / must" },
+  { fi: "rakastaa", en: "to love" },
+  { fi: "muistaa", en: "to remember" },
+  { fi: "unohtaa", en: "to forget" },
+  { fi: "ymmärtää", en: "to understand" },
+  { fi: "aloittaa", en: "to start" },
+  { fi: "lopettaa", en: "to finish" },
+  { fi: "jatkaa", en: "to continue" },
+  { fi: "odottaa", en: "to wait" },
+  { fi: "soittaa", en: "to call / play music" },
+  { fi: "avata", en: "to open" },
+  { fi: "sulkea", en: "to close" }
+];
 
-    function updateRevealState() {
-      if (revealed) {
-        answerText.style.display = "block";
-        hintText.textContent = "Nice! Click “Hide” to test yourself again.";
-      } else {
-        answerText.style.display = "none";
-        hintText.textContent = "Click “Reveal” to see the meaning.";
-      }
-    }
+let deck = [...originalDeck];
+let index = 0;
+let revealed = false;
 
-    function reveal() {
-      revealed = true;
-      updateRevealState();
-    }
+const q = document.getElementById("questionText");
+const a = document.getElementById("answerText");
+const hint = document.getElementById("hintText");
+const progress = document.getElementById("progressText");
+const autoReveal = document.getElementById("autoRevealToggle");
 
-    function hide() {
-      revealed = false;
-      updateRevealState();
-    }
+function updateCard() {
+  q.textContent = deck[index].fi;
+  a.textContent = deck[index].en;
+  progress.textContent = `${index + 1} / ${deck.length}`;
+  revealed = autoReveal.checked;
+  updateReveal();
+}
 
-    function nextCard() {
-      currentIndex = (currentIndex + 1) % deck.length;
-      updateCard();
-    }
+function updateReveal() {
+  a.style.display = revealed ? "block" : "none";
+  hint.textContent = revealed
+    ? "Click Hide to test yourself."
+    : "Click Reveal to see the meaning.";
+}
 
-    function prevCard() {
-      currentIndex = (currentIndex - 1 + deck.length) % deck.length;
-      updateCard();
-    }
+document.getElementById("revealBtn").onclick = () => { revealed = true; updateReveal(); };
+document.getElementById("hideBtn").onclick = () => { revealed = false; updateReveal(); };
+document.getElementById("nextBtn").onclick = () => { index = (index + 1) % deck.length; updateCard(); };
+document.getElementById("prevBtn").onclick = () => { index = (index - 1 + deck.length) % deck.length; updateCard(); };
+document.getElementById("shuffleBtn").onclick = () => {
+  deck.sort(() => Math.random() - 0.5);
+  index = 0;
+  updateCard();
+};
+document.getElementById("resetBtn").onclick = () => {
+  deck = [...originalDeck];
+  index = 0;
+  autoReveal.checked = false;
+  updateCard();
+};
 
-    function shuffleDeck() {
-      // Fisher-Yates shuffle
-      for (let i = deck.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [deck[i], deck[j]] = [deck[j], deck[i]];
-      }
-      currentIndex = 0;
-      updateCard();
-    }
-
-    function resetApp() {
-      deck = [...originalDeck];
-      currentIndex = 0;
-      revealed = false;
-      autoRevealToggle.checked = false;
-      updateCard();
-    }
-
-    // Button events
-    revealBtn.addEventListener("click", reveal);
-    hideBtn.addEventListener("click", hide);
-    nextBtn.addEventListener("click", nextCard);
-    prevBtn.addEventListener("click", prevCard);
-    shuffleBtn.addEventListener("click", shuffleDeck);
-    resetBtn.addEventListener("click", resetApp);
-
-    // Keyboard shortcuts (optional but nice)
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight") nextCard();
-      if (e.key === "ArrowLeft") prevCard();
-      if (e.key.toLowerCase() === "r") reveal();
-      if (e.key.toLowerCase() === "h") hide();
-    });
-
-    // Start app
-    updateCard();
-  </script>
+updateCard();
+</script>
 </body>
 </html>
+
+
 
